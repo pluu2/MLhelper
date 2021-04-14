@@ -11,7 +11,7 @@ def expand(image):
 
 def affine_transformation(input_img,affine,sampling_grid):
   w,h=input_img.shape
-  transformed_grid=jnp.matmul(affine,sampling_grid)
+  transformed_grid=np.matmul(affine,sampling_grid)
   transformed_grid=transformed_grid.T
   x_s = transformed_grid[:, 0:1].squeeze() #take all x
   y_s = transformed_grid[:, 1:2].squeeze() #take all y
