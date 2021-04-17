@@ -27,7 +27,7 @@ def bottom_convolution(image,indices,parameters):
   #when mat mul with split will result in matrix of shape [strides,kernelh,kernelw,channels]
 
   #Can be substituted for any sized network. 
-  convolution = split#np.dot(split,parameters.T)  #try for no convolution.
+  convolution = np.dot(split,parameters.T)  #try for no convolution.
 
   return convolution
 
@@ -41,7 +41,8 @@ def BT_convolution(embeddings,indices,parameters): #Take some number of adjacent
   aggregate=embeddings[indices,:].reshape(len(indices),kh*kw,-1)  #outputs (secctions, kernelw,kernelh,embedding size)
   aggregate = aggregate.reshape(len(indices),-1) #you want sections, embedding_size*kernelw*kernelh, this 'concatenates all the 9 embeddings together. 
   #parameters, shaped (third layer,concatenated embedding) 
-  output=np.dot(aggregate,parameters.T) 
+  #output=np.dot(aggregate,parameters.T) 
+  output=aggregate
   return output
 
 
