@@ -27,7 +27,7 @@ def bottom_convolution(image,indices,parameters):
   #when mat mul with split will result in matrix of shape [strides,kernelh,kernelw,channels]
 
   #Can be substituted for any sized network. 
-  convolution = np.dot(split,parameters.T)  #try for no convolution.
+  convolution = jnp.dot(split,parameters.T)  #try for no convolution.
 
   return convolution
 
