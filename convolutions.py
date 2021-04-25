@@ -1,10 +1,10 @@
-import numpy as np
+import jax.numpy as jnp
 #will stop if kernel step/stride is > width/height of image. 
 def conv_ind_strides (image_dim, kernel,strides=[1,1]): 
   imW,imH,imD=image_dim
   sW,sH=strides
   kw,kh = kernel
-  all_values = np.array(range(0,imW*imH)).reshape(imW,imH)
+  all_values = jnp.array(range(0,imW*imH)).reshape(imW,imH)
   ind=[] 
   hselect=- sH
   wselect=0 
@@ -41,7 +41,7 @@ def BT_convolution(embeddings,indices,parameters): #Take some number of adjacent
   aggregate=embeddings[indices,:].reshape(len(indices),kh*kw,-1)  #outputs (secctions, kernelw,kernelh,embedding size)
   aggregate = aggregate.reshape(len(indices),-1) #you want sections, embedding_size*kernelw*kernelh, this 'concatenates all the 9 embeddings together. 
   #parameters, shaped (third layer,concatenated embedding) 
-  output=np.dot(aggregate,parameters.T) 
+  output=jnp.dot(aggregate,parameters.T) 
   #output=aggregate
   return output
 
@@ -62,6 +62,6 @@ def trace_convolution(interested_stride,ind,starting_layer,total_layers):
       next_layer.append(ind[layer][indices]) #gather the indices, this will output a 9,10,10 shape as there were 9 blocks, with 10x10 indices. 
     #once this is done, reshape into a list of indices. 
     
-    next_layer=np.array(next_layer).flatten() 
+    next_layer=jnp.array(next_layer).flatten() 
     current_layer=next_layer #hand off new indices as currnt layer, and allow the next layer to iterate. 
   return current_layer
