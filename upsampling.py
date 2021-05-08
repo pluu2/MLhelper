@@ -46,7 +46,7 @@ def TranposeConv2D(input_image,param,transpose_ind,gridShape):
   zero_grid=np.tile(np.zeros((gridShape)),(len(transpose_ind),1,1,1))
   zero_grid=zero_grid.reshape(len(zero_grid),-1)
   for i in range(len(zero_grid)): 
-    zero_grid[i,indices[i]]=calculation[i]
+    zero_grid[i,transpose_ind[i]]=calculation[i]
 
   output= np.sum(zero_grid,axis=0)
   return output
