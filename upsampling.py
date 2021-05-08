@@ -39,14 +39,15 @@ def TranposeConv_ind (input_size,kernel_size=[2,2,3],stride=2):
 def TranposeConv2D(input_image,param,transpose_ind,gridShape): 
   ih,iw,id=input_image.shape
   input_image=input_image.reshape(-1,id)
-  calculation = np.dot(input_image,param.T) 
+  calculation = jnp.dot(input_image,param.T) 
   
 
   #now map to upsized image. 
-  zero_grid=np.tile(np.zeros((gridShape)),(len(transpose_ind),1,1,1))
+  zero_grid=jnp.tile(np.zeros((gridShape)),(len(transpose_ind),1,1,1))
   zero_grid=zero_grid.reshape(len(zero_grid),-1)
   for i in range(len(zero_grid)): 
-    zero_grid[i,transpose_ind[i]]=calculation[i]
-
-  output= np.sum(zero_grid,axis=0)
+    #zero_grid[i,transpose_ind[i]]=calculation[i]
+    zero_grid=jax.ops.index_update(zero_grid,jax.ops.index[i,transpose_ind[i]],calculation[i])
+    #jax.ops.index_update(test,3,6)
+  output= jnp.sum(zero_grid,axis=0)
   return output
