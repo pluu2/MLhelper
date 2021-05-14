@@ -6,9 +6,9 @@ def attention(q,k,temp=1):
 #you can take the indices that the software generates.so the indices are right now set with range of 0: total_image_pixels, we need to normalize it to be between 0..1 or even
 #-1,1  . Let's try 0,1
 def normalize_coordinate(indices): 
-  return indices/np.max(indices)
+  return indices/jnp.max(indices)
 def restore_coordinate(indices,original_indices): 
-   output=indices*np.max(original_indices)
+   output=indices*jnp.max(original_indices)
    return output.astype('int32')
 #Let t= position, let W_t be paramete, let p represent positional embedding. 
 def generate_embeddings(indices,parameter): 
