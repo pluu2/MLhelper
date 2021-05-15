@@ -15,6 +15,7 @@ def generate_embeddings(indices,parameter):
   indices=indices.reshape(len(indices),-1) #flatten the kernel into one peice
   return jnp.dot(indices,parameter.T) 
 
+
 #query is some vector draw up specific values (which is a layer below). 
 def attention_cluster(query,values,temperature=1,repeats =1): 
   #this needs to go into a layer. 
@@ -29,5 +30,26 @@ def attention_cluster(query,values,temperature=1,repeats =1):
     query=jnp.dot(att,values)
     
   #hadamand product to get the new transformation. 
-  cluster=att.reshape(-1,1) * values #gather components. 
+  #cluster=att.reshape(-1,1) * values #gather components. 
+  att=att.reshape(-1) 
+  cluster=jnp.dot(att,values)
   return cluster
+
+#query is some vector draw up specific values (which is a layer below). 
+def attention_dist(query,values,temperature=1,repeats =1): 
+  #this needs to go into a layer. 
+  #for a given head of attention. you can sum together
+  #you can calculate all the heads, and all the associated cluster, multiplied by different values. 
+  #ys=range(len(att)) 
+  #values=layer2
+  #probably can be vectorized for sure. [head,query,values]
+  #query=values[head] #for a given head, hopfield like network. 
+  for i in range(repeats):
+    att=attention(query,values,temp=temperature) #this gives the probability distribution. 
+    query=jnp.dot(att,values)
+    
+  #hadamand product to get the new transformation. 
+  #cluster=att.reshape(-1,1) * values #gather components. 
+  #att=att.reshape(-1) 
+  #cluster=jnp.dot(att,values)
+  return att
